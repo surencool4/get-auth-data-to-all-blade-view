@@ -5,8 +5,9 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
 
+use Illuminate\Support\Facades\Blade;
 use View;
-use App\Cart;
+use App\Template;
 use Auth;
 // use App\User;
 
@@ -30,22 +31,19 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        // (Auth::check())
-
-        // $template = Template::where('user_id',1)->get()->first();
-
-        // View::share([
-        //     'template'=> $template,
-        // ]);
-
         //compose all the views....
+
         view()->composer('*', function ($view) {
-            $cart = Cart::where('user_id', Auth::user()->id)->get()->first();
-            $view->with('cart', $cart );    
+            if (Auth::check()){
+                $template = Template::where('user_id', Auth::user()->id)->get()->first();
+                $view->with('template', $template ); 
+            }
         }); 
 
-        
+
+        Blade::if('env', function ($environment) {
+            return app()->environment($environment);
+        });
    
     }
 }
-
