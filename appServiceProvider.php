@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Schema;
 
 use Illuminate\Support\Facades\Blade;
 use View;
-use App\Template;
+use App\Cart;
 use Auth;
 // use App\User;
 
@@ -35,8 +35,8 @@ class AppServiceProvider extends ServiceProvider
 
         view()->composer('*', function ($view) {
             if (Auth::check()){
-                $template = Template::where('user_id', Auth::user()->id)->get()->first();
-                $view->with('template', $template ); 
+                $cart = Cart::where('user_id', Auth::user()->id)->get()->first();
+                $view->with('cart', $cart ); 
             }
         }); 
 
